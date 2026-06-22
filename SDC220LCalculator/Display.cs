@@ -28,7 +28,6 @@ public static class Display
         Console.WriteLine(" Because light attracts bugs.\"");
         Console.WriteLine(Line);
         Console.Write("Press any key to begin...");
-        Console.ReadKey(true);
         Console.WriteLine();
         Console.WriteLine();
     }

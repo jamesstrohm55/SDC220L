@@ -2,6 +2,7 @@ using SDC220LCalculator;
 
 Display.ShowHeader(2);
 Display.ShowWelcome();
+InputHelper.WaitForKeyPress();
 
 while (true)
 {
@@ -66,8 +67,15 @@ while (true)
         }
         case 7:
         {
-            Memory.Clear();
-            Display.ShowResult("Memory cleared.");
+            if (!Memory.HasValue)
+            {
+                Display.ShowError("Memory is already empty.");
+            }
+            else
+            {
+                Memory.Clear();
+                Display.ShowResult("Memory cleared.");
+            }
             break;
         }
         case 8:
