@@ -5,7 +5,7 @@ namespace SDC220LCalculator;
 /// </summary>
 public static class Display
 {
-    private const string StudentName = "[Your Name]"; // Replace with your full name before submitting
+    private const string StudentName = "James Strohm"; // Replace with your full name before submitting
     private const string Line = "----------------------------------------";
     private const string DoubleLine = "========================================";
 
