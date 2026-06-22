@@ -1,25 +1,20 @@
 namespace SDC220LCalculator;
 
-/// <summary>
-/// Centralizes all console output. No other class calls Console.Write/WriteLine directly.
-/// </summary>
 public static class Display
 {
-    private const string StudentName = "James Strohm"; // Replace with your full name before submitting
+    private const string StudentName = "James Strohm";
     private const string Line = "----------------------------------------";
     private const string DoubleLine = "========================================";
 
-    /// <summary>Prints the assignment header: week number, title, and student name.</summary>
-    public static void ShowHeader()
+    public static void ShowHeader(int week)
     {
         Console.WriteLine(DoubleLine);
-        Console.WriteLine("  Project Week 1 | SDC220L Calculator");
+        Console.WriteLine($"  Project Week {week} | SDC220L Calculator");
         Console.WriteLine($"  {StudentName}");
         Console.WriteLine(DoubleLine);
         Console.WriteLine();
     }
 
-    /// <summary>Prints the welcome message, then blocks until the user presses any key.</summary>
     public static void ShowWelcome()
     {
         Console.WriteLine("Welcome to the SDC220L Calculator!");
@@ -33,12 +28,26 @@ public static class Display
         Console.WriteLine(" Because light attracts bugs.\"");
         Console.WriteLine(Line);
         Console.Write("Press any key to begin...");
-        Console.ReadKey(true); // true = do not echo the key
         Console.WriteLine();
         Console.WriteLine();
     }
 
-    /// <summary>Prints <paramref name="formula"/> surrounded by separator lines.</summary>
+    public static void ShowMainMenu()
+    {
+        Console.WriteLine(DoubleLine);
+        Console.WriteLine("  SDC220L Calculator — Main Menu");
+        Console.WriteLine(DoubleLine);
+        Console.WriteLine("  1. Add");
+        Console.WriteLine("  2. Subtract");
+        Console.WriteLine("  3. Multiply");
+        Console.WriteLine("  4. Divide");
+        Console.WriteLine("  5. Memory Store (MS)");
+        Console.WriteLine("  6. Memory Recall (MR)");
+        Console.WriteLine("  7. Memory Clear (MC)");
+        Console.WriteLine("  8. Quit");
+        Console.WriteLine(Line);
+    }
+
     public static void ShowResult(string formula)
     {
         Console.WriteLine(Line);
@@ -47,33 +56,11 @@ public static class Display
         Console.WriteLine();
     }
 
-    /// <summary>Prints a formatted error message.</summary>
     public static void ShowError(string message)
     {
         Console.WriteLine($"  Error: {message}");
     }
 
-    /// <summary>
-    /// Prints the post-result navigation menu.
-    /// Pass <paramref name="hasNext"/> = true to show Continue (1) and Exit (2).
-    /// Pass false to show only Exit (1).
-    /// </summary>
-    public static void ShowMenu(bool hasNext)
-    {
-        Console.WriteLine(Line);
-        Console.WriteLine("What would you like to do next?");
-        if (hasNext)
-        {
-            Console.WriteLine("  1. Continue to next operation");
-            Console.WriteLine("  2. Exit");
-        }
-        else
-        {
-            Console.WriteLine("  1. Exit");
-        }
-    }
-
-    /// <summary>Prints the closing message.</summary>
     public static void ShowClosing()
     {
         Console.WriteLine();

@@ -59,4 +59,10 @@ public static class InputHelper
             Display.ShowError($"Please enter a number between {min} and {max}. Try again.");
         }
     }
+
+    /// <summary>Waits for any key press to continue.</summary>
+    public static void WaitForKeyPress()
+    {
+        Console.ReadKey(true);
+    }
 }
