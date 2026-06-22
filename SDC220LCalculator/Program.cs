@@ -1,38 +1,87 @@
-﻿namespace SDC220LCalculator;
+using SDC220LCalculator;
 
-/// <summary>
-/// Week 1 entry point: header → welcome → integer addition → floating-point subtraction → exit.
-/// All I/O is routed through Display and InputHelper.
-/// </summary>
-class Program
+Display.ShowHeader(2);
+Display.ShowWelcome();
+InputHelper.WaitForKeyPress();
+
+while (true)
 {
-    static void Main(string[] args)
+    Display.ShowMainMenu();
+    int choice = InputHelper.ReadMenuChoice(1, 8);
+
+    switch (choice)
     {
-        // Startup
-        Display.ShowHeader();
-        Display.ShowWelcome();
-
-        // Integer addition
-        int a = InputHelper.ReadInt("Enter the first integer value: ");
-        int b = InputHelper.ReadInt("Enter the second integer value: ");
-        Display.ShowResult($"{a} + {b} = {a + b}");
-
-        Display.ShowMenu(hasNext: true);
-        int choice1 = InputHelper.ReadMenuChoice(1, 2);
-        if (choice1 == 2)
+        case 1:
+        {
+            double a = InputHelper.ReadDouble("Enter first value: ");
+            double b = InputHelper.ReadDouble("Enter second value: ");
+            Display.ShowResult($"{a:F2} + {b:F2} = {Calculator.Add(a, b):F2}");
+            break;
+        }
+        case 2:
+        {
+            double a = InputHelper.ReadDouble("Enter first value: ");
+            double b = InputHelper.ReadDouble("Enter second value: ");
+            Display.ShowResult($"{a:F2} - {b:F2} = {Calculator.Subtract(a, b):F2}");
+            break;
+        }
+        case 3:
+        {
+            double a = InputHelper.ReadDouble("Enter first value: ");
+            double b = InputHelper.ReadDouble("Enter second value: ");
+            Display.ShowResult($"{a:F2} × {b:F2} = {Calculator.Multiply(a, b):F2}");
+            break;
+        }
+        case 4:
+        {
+            double a = InputHelper.ReadDouble("Enter first value: ");
+            double b = InputHelper.ReadDouble("Enter second value: ");
+            try
+            {
+                Display.ShowResult($"{a:F2} ÷ {b:F2} = {Calculator.Divide(a, b):F2}");
+            }
+            catch (DivideByZeroException)
+            {
+                Display.ShowError("Cannot divide by zero.");
+            }
+            break;
+        }
+        case 5:
+        {
+            double v = InputHelper.ReadDouble("Enter value to store: ");
+            Memory.Store(v);
+            Display.ShowResult($"Memory = {v:F2}");
+            break;
+        }
+        case 6:
+        {
+            try
+            {
+                Display.ShowResult($"Memory = {Memory.Recall():F2}");
+            }
+            catch (InvalidOperationException)
+            {
+                Display.ShowError("Memory is empty. Use Memory Store (5) first.");
+            }
+            break;
+        }
+        case 7:
+        {
+            if (!Memory.HasValue)
+            {
+                Display.ShowError("Memory is already empty.");
+            }
+            else
+            {
+                Memory.Clear();
+                Display.ShowResult("Memory cleared.");
+            }
+            break;
+        }
+        case 8:
         {
             Display.ShowClosing();
             return;
         }
-
-        // Floating-point subtraction (first value minus second value)
-        double x = InputHelper.ReadDouble("Enter the first decimal value: ");
-        double y = InputHelper.ReadDouble("Enter the second decimal value: ");
-        Display.ShowResult($"{x:F2} - {y:F2} = {x - y:F2}");
-
-        Display.ShowMenu(hasNext: false);
-        InputHelper.ReadMenuChoice(1, 1);
-
-        Display.ShowClosing();
     }
 }
