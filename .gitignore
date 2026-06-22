@@ -4,4 +4,4 @@ obj/
 *.user
 .claude/
 .superpowers/
-docs/
+docs
