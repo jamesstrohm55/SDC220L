@@ -43,4 +43,47 @@ public class CalculatorTests
     [Fact]
     public void Divide_ByZero_ThrowsDivideByZeroException() =>
         Assert.Throws<DivideByZeroException>(() => Calculator.Divide(5.0, 0.0));
+
+    // Sum
+    [Fact]
+    public void Sum_ReturnsCorrectTotal() =>
+        Assert.Equal(6, Calculator.Sum(new[] { 1, 2, 3 }));
+
+    [Fact]
+    public void Sum_SingleValue_ReturnsThatValue() =>
+        Assert.Equal(5, Calculator.Sum(new[] { 5 }));
+
+    [Fact]
+    public void Sum_WithNegatives_ReturnsCorrectTotal() =>
+        Assert.Equal(0, Calculator.Sum(new[] { -3, 3 }));
+
+    // Average
+    [Fact]
+    public void Average_EvenValues_ReturnsCorrectMean() =>
+        Assert.Equal(2.0, Calculator.Average(new[] { 1, 2, 3 }));
+
+    [Fact]
+    public void Average_NonEvenSplit_ReturnsDecimal() =>
+        Assert.Equal(2.5, Calculator.Average(new[] { 1, 2, 3, 4 }));
+
+    [Fact]
+    public void Average_EmptyArray_ThrowsInvalidOperationException() =>
+        Assert.Throws<InvalidOperationException>(() => Calculator.Average(Array.Empty<int>()));
+
+    // FirstLastDifference
+    [Fact]
+    public void FirstLastDifference_ReturnsFirstMinusLast() =>
+        Assert.Equal(2, Calculator.FirstLastDifference(new[] { 5, 3, 1, 3 }));
+
+    [Fact]
+    public void FirstLastDifference_TwoValues_ReturnsFirstMinusLast() =>
+        Assert.Equal(3, Calculator.FirstLastDifference(new[] { 5, 2 }));
+
+    [Fact]
+    public void FirstLastDifference_SingleValue_ThrowsInvalidOperationException() =>
+        Assert.Throws<InvalidOperationException>(() => Calculator.FirstLastDifference(new[] { 1 }));
+
+    [Fact]
+    public void FirstLastDifference_EmptyArray_ThrowsInvalidOperationException() =>
+        Assert.Throws<InvalidOperationException>(() => Calculator.FirstLastDifference(Array.Empty<int>()));
 }
