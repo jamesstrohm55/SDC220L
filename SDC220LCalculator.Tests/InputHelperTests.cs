@@ -34,4 +34,35 @@ public class InputHelperTests
         if (expectedOk)
             Assert.Equal(expectedVal, val, precision: 5);
     }
+
+    // ReadDoubleOrThrow reads a line from the console, so redirect Console.In
+    // to feed it test input, then restore the original reader afterward.
+    private static double InvokeReadDoubleOrThrow(string consoleInput)
+    {
+        System.IO.TextReader original = Console.In;
+        try
+        {
+            Console.SetIn(new System.IO.StringReader(consoleInput));
+            return InputHelper.ReadDoubleOrThrow("prompt: ");
+        }
+        finally
+        {
+            Console.SetIn(original);
+        }
+    }
+
+    [Theory]
+    [InlineData("3.14\n",  3.14)]
+    [InlineData("-1.5\n", -1.5)]
+    [InlineData("42\n",   42.0)]
+    public void ReadDoubleOrThrow_ValidNumber_ReturnsValue(string input, double expected) =>
+        Assert.Equal(expected, InvokeReadDoubleOrThrow(input), precision: 5);
+
+    [Fact]
+    public void ReadDoubleOrThrow_NonNumber_ThrowsFormatException() =>
+        Assert.Throws<FormatException>(() => InvokeReadDoubleOrThrow("abc\n"));
+
+    [Fact]
+    public void ReadDoubleOrThrow_Empty_ThrowsFormatException() =>
+        Assert.Throws<FormatException>(() => InvokeReadDoubleOrThrow("\n"));
 }
