@@ -1,197 +1,73 @@
+// -----------------------------------------------------------------------------
+// SDC220L - Project Week 4: Division with Exception Handling
+// Author: James Strohm
+//
+// This application repeatedly divides a first number by a second number.
+// It demonstrates exception handling for two cases:
+//   * Dividing by zero            -> DivideByZeroException
+//   * Entering a non-number value -> FormatException / OverflowException
+// In every error case the user is told what went wrong and asked to try again.
+// The program continues until the user chooses to quit.
+//
+// Responsibilities are split across reusable classes:
+//   * Display     - all screen output (header, welcome, results, errors, closing)
+//   * InputHelper - reading and parsing values entered by the user
+//   * Calculator  - the math operation (division)
+// These classes are reused from earlier weeks and extended for Week 4.
+// -----------------------------------------------------------------------------
+
+using System.Globalization;
 using SDC220LCalculator;
 
-Display.ShowHeader(3);
-Display.ShowWelcome();
+// Use a period as the decimal separator for both input and output regardless
+// of the machine's regional settings, so displayed results stay consistent.
+CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
+// Step 1 & 2: informative header line and a welcome message with instructions.
+Display.ShowHeader(4);
+Display.ShowWelcomeWeek4();
 InputHelper.WaitForKeyPress();
+Console.WriteLine();
 
-while (true)
+// Main loop: keep dividing until the user chooses to quit.
+bool keepGoing = true;
+while (keepGoing)
 {
-    Display.ShowMainMenu();
-    int choice = InputHelper.ReadMenuChoice(1, 7);
-
-    switch (choice)
+    try
     {
-        case 1:
-        {
-            double a = InputHelper.ReadDouble("Enter first value: ");
-            double b = InputHelper.ReadDouble("Enter second value: ");
-            Display.ShowResult($"{a:F2} + {b:F2} = {Calculator.Add(a, b):F2}");
-            break;
-        }
-        case 2:
-        {
-            double a = InputHelper.ReadDouble("Enter first value: ");
-            double b = InputHelper.ReadDouble("Enter second value: ");
-            Display.ShowResult($"{a:F2} - {b:F2} = {Calculator.Subtract(a, b):F2}");
-            break;
-        }
-        case 3:
-        {
-            double a = InputHelper.ReadDouble("Enter first value: ");
-            double b = InputHelper.ReadDouble("Enter second value: ");
-            Display.ShowResult($"{a:F2} × {b:F2} = {Calculator.Multiply(a, b):F2}");
-            break;
-        }
-        case 4:
-        {
-            double a = InputHelper.ReadDouble("Enter first value: ");
-            double b = InputHelper.ReadDouble("Enter second value: ");
-            try
-            {
-                Display.ShowResult($"{a:F2} ÷ {b:F2} = {Calculator.Divide(a, b):F2}");
-            }
-            catch (DivideByZeroException)
-            {
-                Display.ShowError("Cannot divide by zero.");
-            }
-            break;
-        }
-        case 5: // Memory sub-menu
-        {
-            bool backToMain = false;
-            while (!backToMain)
-            {
-                Display.ShowMemoryMenu();
-                int sub = InputHelper.ReadMenuChoice(1, 4);
-                switch (sub)
-                {
-                    case 1:
-                    {
-                        double v = InputHelper.ReadDouble("Enter value to store: ");
-                        Memory.Store(v);
-                        Display.ShowResult($"Memory = {v:F2}");
-                        break;
-                    }
-                    case 2:
-                    {
-                        try
-                        {
-                            Display.ShowResult($"Memory = {Memory.Recall():F2}");
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            Display.ShowError("Memory is empty.");
-                        }
-                        break;
-                    }
-                    case 3:
-                    {
-                        if (!Memory.HasValue)
-                        {
-                            Display.ShowError("Memory is already empty.");
-                        }
-                        else
-                        {
-                            Memory.Clear();
-                            Display.ShowResult("Memory cleared.");
-                        }
-                        break;
-                    }
-                    case 4:
-                        backToMain = true;
-                        break;
-                }
-            }
-            break;
-        }
-        case 6: // Collection sub-menu
-        {
-            bool backToMain = false;
-            while (!backToMain)
-            {
-                Display.ShowCollectionMenu();
-                int sub = InputHelper.ReadMenuChoice(1, 8);
-                switch (sub)
-                {
-                    case 1: // Display All
-                    {
-                        if (IntCollection.IsEmpty)
-                        {
-                            Display.ShowError("Collection is empty.");
-                        }
-                        else
-                        {
-                            int[] vals = IntCollection.GetAll();
-                            string list = string.Join("\n  ", vals.Select((v, i) => $"{i + 1}. {v}"));
-                            Display.ShowResult(list);
-                        }
-                        break;
-                    }
-                    case 2: // Count
-                    {
-                        Display.ShowResult($"Count: {IntCollection.Count}");
-                        break;
-                    }
-                    case 3: // Remove
-                    {
-                        if (IntCollection.IsEmpty)
-                        {
-                            Display.ShowError("Collection is empty.");
-                            break;
-                        }
-                        int[] vals = IntCollection.GetAll();
-                        string list = string.Join("\n  ", vals.Select((v, i) => $"{i + 1}. {v}"));
-                        Display.ShowResult(list);
-                        int removeChoice = InputHelper.ReadMenuChoice(1, IntCollection.Count);
-                        int removed = vals[removeChoice - 1];
-                        IntCollection.Remove(removeChoice - 1);
-                        Display.ShowResult($"Removed {removed}. Count: {IntCollection.Count}");
-                        break;
-                    }
-                    case 4: // Add
-                    {
-                        if (IntCollection.IsFull)
-                        {
-                            Display.ShowError("Collection is full (10 values maximum).");
-                            break;
-                        }
-                        int v = InputHelper.ReadInt("Enter integer value: ");
-                        IntCollection.Add(v);
-                        Display.ShowResult($"Added {v}. Count: {IntCollection.Count}");
-                        break;
-                    }
-                    case 5: // Sum
-                    {
-                        if (IntCollection.IsEmpty)
-                        {
-                            Display.ShowError("Collection is empty.");
-                            break;
-                        }
-                        Display.ShowResult($"Sum = {Calculator.Sum(IntCollection.GetAll())}");
-                        break;
-                    }
-                    case 6: // Average
-                    {
-                        if (IntCollection.IsEmpty)
-                        {
-                            Display.ShowError("Collection is empty.");
-                            break;
-                        }
-                        Display.ShowResult($"Average = {Calculator.Average(IntCollection.GetAll()):F2}");
-                        break;
-                    }
-                    case 7: // First-Last Difference
-                    {
-                        if (IntCollection.Count < 2)
-                        {
-                            Display.ShowError("Need at least 2 values for first-last difference.");
-                            break;
-                        }
-                        int[] vals = IntCollection.GetAll();
-                        Display.ShowResult($"{vals[0]} - {vals[^1]} = {Calculator.FirstLastDifference(vals)}");
-                        break;
-                    }
-                    case 8:
-                        backToMain = true;
-                        break;
-                }
-            }
-            break;
-        }
-        case 7:
-        {
-            Display.ShowClosing();
-            return;
-        }
+        // Step 3: allow the user to enter two values.
+        // ReadDoubleOrThrow throws if the entry is not a valid number so the
+        // catch blocks below can handle it.
+        double dividend = InputHelper.ReadDoubleOrThrow("Enter the first number (dividend): ");
+        double divisor = InputHelper.ReadDoubleOrThrow("Enter the second number (divisor): ");
+
+        // Step 4: divide the first number by the second.
+        // Calculator.Divide throws DivideByZeroException when divisor is zero.
+        double result = Calculator.Divide(dividend, divisor);
+
+        // Display the result of the division operation.
+        Display.ShowResult($"{dividend:F2} / {divisor:F2} = {result:F2}");
     }
+    catch (DivideByZeroException)
+    {
+        // Handle divide-by-zero: show a message and let the user enter new values.
+        Display.ShowError("You cannot divide by zero. Please enter a different second number.");
+    }
+    catch (FormatException)
+    {
+        // Handle non-numeric input: show a message and let the user enter new values.
+        Display.ShowError("That was not a valid number. Please enter numbers only.");
+    }
+    catch (OverflowException)
+    {
+        // Handle a number too large/small to represent: ask the user to try again.
+        Display.ShowError("That number is too large to handle. Please enter a smaller number.");
+    }
+
+    // Step 5: ask whether to continue; any "no" answer exits the loop.
+    keepGoing = InputHelper.AskYesNo("Would you like to perform another division? (y/n): ");
+    Console.WriteLine();
 }
+
+// Step 6: closing message thanking the user.
+Display.ShowClosing();
