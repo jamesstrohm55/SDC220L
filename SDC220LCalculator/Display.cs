@@ -35,6 +35,31 @@ public static class Display
         Console.Write("Press any key to begin...");
     }
 
+    /// <summary>
+    /// Prints the welcome message and instructions for the Week 4
+    /// division application.
+    /// </summary>
+    public static void ShowWelcomeWeek4()
+    {
+        Console.WriteLine("Welcome to the SDC220L Division Calculator!");
+        Console.WriteLine(Line);
+        Console.WriteLine("This program divides one number by another.");
+        Console.WriteLine("Instructions:");
+        Console.WriteLine("  1. Enter a first number (the dividend).");
+        Console.WriteLine("  2. Enter a second number (the divisor).");
+        Console.WriteLine("  3. The result of first / second is shown.");
+        Console.WriteLine();
+        Console.WriteLine("Don't worry about mistakes:");
+        Console.WriteLine("  - If you divide by zero, you'll be asked again.");
+        Console.WriteLine("  - If you type something that isn't a number,");
+        Console.WriteLine("    you'll be asked again.");
+        Console.WriteLine();
+        Console.WriteLine("You can keep dividing as many times as you");
+        Console.WriteLine("like, and quit whenever you are done.");
+        Console.WriteLine(Line);
+        Console.Write("Press any key to begin...");
+    }
+
     /// <summary>Prints the 7-item main menu.</summary>
     public static void ShowMainMenu()
     {
